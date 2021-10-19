@@ -14,12 +14,15 @@ namespace OdooRpc.CoreCLR.Client.Samples
             var configuration = LoadConfiguration();
             var odooConnection = configuration.GetSection("OdooConnection").Get<OdooConnectionInfo>();
 
-            var client = new SampleClient(odooConnection);
-            await client.LoginToOdoo();
-            await client.GetMetadata();
+            // var client = new SampleClient(odooConnection);
+            // await client.LoginToOdoo();
+            // await client.GetMetadata();
 
             // test your calls here
-                        
+            var client = new MyClient1(odooConnection);
+            await client.LoginToOdoo();
+            await client.GetAllInvoices();
+            await client.CreateInvoice("Test Company");            
             Console.WriteLine("Done!");
         }
 
