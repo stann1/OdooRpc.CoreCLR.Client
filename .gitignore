@@ -81,3 +81,9 @@ UpgradeLog*.htm
 *.pidb
 *.*sdf
 *.ipch
+
+# Vscode user-specific files
+.vscode/
+
+# appsetting envs
+appsettings.*.json

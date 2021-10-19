@@ -1,6 +1,6 @@
 # OdooRpc.CoreCLR.Client
 
-Simple [Odoo JSON-RPC](https://www.odoo.com/documentation/9.0/api_integration.html) Client for [.Net Core 1.0](https://www.microsoft.com/net/core).
+Simple [Odoo JSON-RPC](https://www.odoo.com/documentation/9.0/api_integration.html) Client for [.Net Core 3.1](https://www.microsoft.com/net/core).
 
 Inspired by https://github.com/saidimu/odoo and https://github.com/osiell/odoorpc.
 

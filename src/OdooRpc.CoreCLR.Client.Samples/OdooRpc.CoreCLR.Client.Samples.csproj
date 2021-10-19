@@ -1,22 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Simple Odoo JSON-RPC Client for .Net Core 1.0</Description>
+    <Description>Simple Odoo JSON-RPC Client for .Net Core 3.1</Description>
     <Authors>vmlf01;trafaelsilva</Authors>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>OdooRpc.CoreCLR.Client.Samples</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>OdooRpc.CoreCLR.Client.Samples</PackageId>
     <PackageTags>odoo;openerp;dotnet code;json-rpc;dotnet</PackageTags>
     <PackageProjectUrl>https://github.com/vmlf01/OdooRpc.CoreCLR.Client</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/vmlf01/OdooRpc.CoreCLR.Client/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicense>https://github.com/vmlf01/OdooRpc.CoreCLR.Client/blob/master/LICENSE</PackageLicense>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/vmlf01/OdooRpc.CoreCLR.Client</RepositoryUrl>
-    <RuntimeFrameworkVersion>1.0.4</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OdooRpc.CoreCLR.Client\OdooRpc.CoreCLR.Client.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.3" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.3" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.3" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.3" />
   </ItemGroup>
 
 </Project>
