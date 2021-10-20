@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -72,6 +73,22 @@ namespace OdooRpc.CoreCLR.Client.Samples
             }
         }
 
+        public async Task GetCustomers(IEnumerable<long> ids)
+        {
+            try
+            {
+                var searchParams = new OdooGetParameters("res.partner", ids);
+
+                var departments = await this.OdooRpcClient.Get<JObject[]>(searchParams);
+
+                Array.ForEach<JObject>(departments, Console.WriteLine);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting customers from Odoo: {0}", ex.Message);
+            }
+        }
+
         public async Task CreateInvoice(string customerName = null)
         {
             try
@@ -95,26 +112,49 @@ namespace OdooRpc.CoreCLR.Client.Samples
                     }
                     else
                     {
+                        string searchCountry = "bulgaria";
+                        var matchingCountries = await this.OdooRpcClient.Search<long[]>(new OdooSearchParameters
+                        (
+                            "res.country",
+                            new OdooDomainFilter().Filter("name", "ilike", searchCountry)
+                        ));
+
+                        long countryId = matchingCountries.FirstOrDefault();
+                        if (countryId <= 0)
+                        {
+                            throw new ArgumentException("Cannot find country " + searchCountry);
+                        }
                         // TODO: create customer
+                        customerId = await this.OdooRpcClient.Create<dynamic>("res.partner", new {
+                            name = customerName,
+                            street = "Made-up address 1",
+                            city = "Vratza",
+                            country_id = countryId,
+                            email = "madeupemail1@abv.bg",
+                            x_nickname = $"{customerName} accountId"
+                        });
                     }
                     
-                    Console.WriteLine(foundCustomer);
+                    Console.WriteLine("Creating invoice for customer " + customerId);
                 }
 
                 var id = await this.OdooRpcClient.Create<dynamic>("account.move", new
                 {
                     partner_id = customerId,
-                    move_type = "out_invoice"
+                    move_type = "out_invoice",
+                    x_external_creator = "portal Admin3"
                 });
 
-                Console.WriteLine("Created " + id);
+                Console.WriteLine("Created invoice " + id);
 
                 // await this.OdooRpcClient.Delete("account.move", 2);
             }
             catch (RpcCallException ex)
             {
                 Console.WriteLine("Error creating invoice: {0}", ex.Message);
-                Console.WriteLine(JsonConvert.SerializeObject(ex.RpcErrorData));
+                var valueErr = Regex.Match(JsonConvert.SerializeObject(ex.RpcErrorData), "message\":.*"); 
+                // System.Console.WriteLine(JsonConvert.SerializeObject(ex.RpcErrorData));
+                Console.WriteLine(valueErr);
             }
         }
     }
