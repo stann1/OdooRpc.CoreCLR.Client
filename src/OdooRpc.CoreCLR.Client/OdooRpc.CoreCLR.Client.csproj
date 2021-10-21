@@ -11,7 +11,7 @@
     <PackageLicense>https://github.com/GathSystemsOdoo/OdooRpc.CoreCLR.Client/blob/master/LICENSE</PackageLicense>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/GathSystemsOdoo/OdooRpc.CoreCLR.Client</RepositoryUrl>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company>LORDofDOOM;vmlf01;trafaelsilva</Company>
   </PropertyGroup>

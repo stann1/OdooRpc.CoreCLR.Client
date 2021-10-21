@@ -21,9 +21,9 @@ namespace OdooRpc.CoreCLR.Client.Samples
             // test your calls here
             var client = new MyClient1(odooConnection);
             await client.LoginToOdoo();
-            // await client.GetAllInvoices();
+            await client.GetInvoiceFull(14);
             // await client.GetCustomers(new[] { 1L });
-            await client.CreateInvoice("Test Company 4");            
+            // await client.CreateInvoice("Test Company 2", "order 1122", 90.00m);            
             Console.WriteLine("Done!");
         }
 

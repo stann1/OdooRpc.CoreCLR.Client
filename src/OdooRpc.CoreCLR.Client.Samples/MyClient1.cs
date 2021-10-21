@@ -89,7 +89,32 @@ namespace OdooRpc.CoreCLR.Client.Samples
             }
         }
 
-        public async Task CreateInvoice(string customerName = null)
+        public async Task GetInvoiceFull(long id)
+        {
+            try
+            {
+                var searchParams = new OdooGetParameters("account.move", new long[]{id});
+
+                var invoices = await this.OdooRpcClient.Get<JObject[]>(searchParams);
+                foreach (var inv in invoices)
+                {
+                    System.Console.WriteLine(inv);
+                    var ids = (JArray)inv["line_ids"];
+                    var lineIds = ids.Select(l => (long)l).ToList();
+                    var invLines = await this.OdooRpcClient.Get<JObject[]>(new OdooGetParameters("account.move.line", lineIds));
+                    foreach (var line in invLines)
+                    {
+                        System.Console.WriteLine(line);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting invoices from Odoo: {0}", ex.Message);
+            }
+        }
+
+        public async Task CreateInvoice(string customerName, string reason, decimal amount)
         {
             try
             {
@@ -138,11 +163,30 @@ namespace OdooRpc.CoreCLR.Client.Samples
                     Console.WriteLine("Creating invoice for customer " + customerId);
                 }
 
+                // create invoice
                 var id = await this.OdooRpcClient.Create<dynamic>("account.move", new
                 {
                     partner_id = customerId,
                     move_type = "out_invoice",
                     x_external_creator = "portal Admin3"
+                });
+
+                // create invoice line
+                var salesAccounts = await this.OdooRpcClient.Search<long[]>(new OdooSearchParameters
+                (
+                    "account.account",
+                    new OdooDomainFilter().Filter("code", "=", 700000)
+                ));
+                long salesAccId = salesAccounts.FirstOrDefault();
+
+                var lineId = await this.OdooRpcClient.Create<dynamic>("account.move.line", new 
+                {
+                    move_id = id,
+                    name = reason,
+                    quantity = 1.0,
+                    price_unit = amount,
+                    tax_ids = 1,
+                    account_id = salesAccId  // 700000 - Sales
                 });
 
                 Console.WriteLine("Created invoice " + id);
