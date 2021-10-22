@@ -144,6 +144,12 @@ namespace OdooRpc.CoreCLR.Client
             return createCommand.Execute(this.SessionInfo, model, newRecord);
         }
 
+        public Task<IEnumerable<long>> CreateMulti<T>(string model, T newRecord)
+        {
+            var createCommand = new OdooCreateCommand(CreateRpcClient());
+            return createCommand.ExecuteMulti(this.SessionInfo, model, newRecord);
+        }
+
         public Task<dynamic> CreateDynamic<T>(string model, string method, T id)
         {
             var createCommand = new OdooCreateDynamicCommand(CreateRpcClient());

@@ -116,6 +116,7 @@ namespace OdooRpc.CoreCLR.Client.Samples
 
         public async Task CreateInvoice(string customerName, string reason, decimal amount)
         {
+            long createdId = 0;
             try
             {
                 long customerId = 0;
@@ -164,32 +165,66 @@ namespace OdooRpc.CoreCLR.Client.Samples
                 }
 
                 // create invoice
-                var id = await this.OdooRpcClient.Create<dynamic>("account.move", new
+                createdId = await this.OdooRpcClient.Create<dynamic>("account.move", new
                 {
                     partner_id = customerId,
                     move_type = "out_invoice",
                     x_external_creator = "portal Admin3"
                 });
 
-                // create invoice line
-                var salesAccounts = await this.OdooRpcClient.Search<long[]>(new OdooSearchParameters
-                (
-                    "account.account",
-                    new OdooDomainFilter().Filter("code", "=", 700000)
-                ));
-                long salesAccId = salesAccounts.FirstOrDefault();
+                // create invoice lines
+                // var salesAccounts = await this.OdooRpcClient.Search<long[]>(new OdooSearchParameters
+                // (
+                //     "account.account",
+                //     new OdooDomainFilter().Filter("code", "=", 700000)
+                // ));
+                // long salesAccId = salesAccounts.FirstOrDefault();
+                long salesAccId = 1;
+                long receivablesAccId = 2;  // TODO: get from response
 
-                var lineId = await this.OdooRpcClient.Create<dynamic>("account.move.line", new 
-                {
-                    move_id = id,
-                    name = reason,
-                    quantity = 1.0,
-                    price_unit = amount,
-                    tax_ids = 1,
-                    account_id = salesAccId  // 700000 - Sales
-                });
+                var createLines = new List<dynamic>(){
+                    new 
+                    {
+                        move_id = createdId,
+                        name = reason,
+                        quantity = 1.0,
+                        price_unit = amount,
+                        credit = amount,
+                        partner_id = customerId,
+                        //tax_ids = new object[]{new object[]{6, false, new object[]{1}}},
+                        account_id = salesAccId  // 700000 - Sales
+                    },
+                    new 
+                    {
+                        move_id = createdId,
+                        name = reason,
+                        quantity = 1.0,
+                        debit = 1.0m * amount,
+                        exclude_from_invoice_tab = true,
+                        partner_id = customerId,
+                        //tax_ids = new object[]{new object[]{6, false, new object[]{}}},
+                        //tax_tag_ids = new object[]{new object[]{6, false, new object[]{}}},
+                        account_id = receivablesAccId  // 410000 - Receivables
+                    },
+                    // new 
+                    // {
+                    //     move_id = createdId,
+                    //     name = "VAT 20%",
+                    //     quantity = 1.0,
+                    //     credit = 0.2m * amount,
+                    //     tax_base_amount = amount,
+                    //     exclude_from_invoice_tab = true,
+                    //     partner_id = customerId,
+                    //     tax_ids = new object[]{new object[]{6, false, new object[]{}}},
+                    //     tax_repartition_line_id = 2,
+                    //     account_id = 13  // VAT
+                    // }
+                };
+                await this.OdooRpcClient.CreateMulti<List<dynamic>>("account.move.line", createLines); 
+                // var salesLineId = await this.OdooRpcClient.Create<dynamic>("account.move.line", );
+                // var receivesLineId = await this.OdooRpcClient.Create<dynamic>("account.move.line", );
 
-                Console.WriteLine("Created invoice " + id);
+                Console.WriteLine("Created invoice " + createdId);
 
                 // await this.OdooRpcClient.Delete("account.move", 2);
             }
@@ -199,6 +234,11 @@ namespace OdooRpc.CoreCLR.Client.Samples
                 var valueErr = Regex.Match(JsonConvert.SerializeObject(ex.RpcErrorData), "message\":.*"); 
                 // System.Console.WriteLine(JsonConvert.SerializeObject(ex.RpcErrorData));
                 Console.WriteLine(valueErr);
+
+                if (createdId > 0)
+                {
+                    await this.OdooRpcClient.Delete("account.move", createdId);
+                }
             }
         }
     }

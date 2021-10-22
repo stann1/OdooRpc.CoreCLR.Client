@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using OdooRpc.CoreCLR.Client.Internals.Interfaces;
 using OdooRpc.CoreCLR.Client.Models;
 using JsonRpc.CoreCLR.Client.Interfaces;
+using System.Collections.Generic;
 
 namespace OdooRpc.CoreCLR.Client.Internals.Commands
 {
@@ -15,6 +16,11 @@ namespace OdooRpc.CoreCLR.Client.Internals.Commands
         public Task<long> Execute<T>(OdooSessionInfo sessionInfo, string model, T newRecord)
         {
             return InvokeRpc<long>(sessionInfo, CreateCreateRequest(sessionInfo, model, newRecord));
+        }
+
+        public Task<IEnumerable<long>> ExecuteMulti<T>(OdooSessionInfo sessionInfo, string model, T newRecord)
+        {
+            return InvokeRpc<IEnumerable<long>>(sessionInfo, CreateCreateRequest(sessionInfo, model, newRecord));
         }
 
         private OdooRpcRequest CreateCreateRequest(OdooSessionInfo sessionInfo, string model, object newRecord)
