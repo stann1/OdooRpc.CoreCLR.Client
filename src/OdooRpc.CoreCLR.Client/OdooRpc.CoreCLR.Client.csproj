@@ -1,24 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Simple Odoo JSON-RPC Client for .Net Core 3.1. Fork from https://github.com/vmlf01/OdooRpc.CoreCLR.Client</Description>
-    <Authors>LORDofDOOM;vmlf01;trafaelsilva</Authors>
+    <Description>Simple Odoo JSON-RPC Client, adapted to .Net Core 3.1. Fork from https://github.com/vmlf01/OdooRpc.CoreCLR.Client</Description>
+    <Authors>Stann</Authors>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>OdooRpc.CoreCLR.Client</AssemblyName>
-    <PackageId>OdooRpc.CoreCLR.Client.V2</PackageId>
+    <PackageId>OdooRpc.CoreCLR.Client.V3</PackageId>
     <PackageTags>odoo;openerp;dotnet code;json-rpc;dotnet</PackageTags>
-    <PackageProjectUrl>https://github.com/GathSystemsOdoo/OdooRpc.CoreCLR.Client</PackageProjectUrl>
-    <PackageLicense>https://github.com/GathSystemsOdoo/OdooRpc.CoreCLR.Client/blob/master/LICENSE</PackageLicense>
+    <PackageProjectUrl>https://github.com/stann1/OdooRpc.CoreCLR.Client</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/GathSystemsOdoo/OdooRpc.CoreCLR.Client</RepositoryUrl>
-    <Version>2.1.0</Version>
+    <RepositoryUrl>https://github.com/stann1/OdooRpc.CoreCLR.Client</RepositoryUrl>
+    <Version>2.2.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Company>LORDofDOOM;vmlf01;trafaelsilva</Company>
+    <Company>Hollso.com</Company>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="JsonRpc.CoreCLR.Client" Version="1.0.1" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="../../LICENSE" Pack="true" PackagePath=""/>
+</ItemGroup>
 
 </Project>

@@ -37,7 +37,7 @@ You will need nuget.exe on your path and set the NuGet API Key before you can pu
 
 ```Shell
 nuget.exe setApiKey 76d7xxxx-xxxx-xxxx-xxxx-eabb8b0cxxxx
-nuget.exe push .\build\OdooRpc.CoreCLR.Client.0.0.1.nupkg
+nuget.exe push .\build\OdooRpc.CoreCLR.Client.V3.2.2.0.nupkg
 ```
 
 ### Samples
