@@ -23,6 +23,11 @@ namespace OdooRpc.CoreCLR.Client
         {
         }
 
+        public OdooRpcClient(OdooConnectionInfo connectionInfo, IWebRequestPreProcessor requestPreProcessor)
+            : this(new JsonRpcClientFactory(requestPreProcessor), connectionInfo)
+        {
+        }
+
         internal OdooRpcClient(IJsonRpcClientFactory rpcFactory, OdooConnectionInfo connectionInfo)
         {
             this.RpcFactory = rpcFactory;

@@ -12,9 +12,17 @@ namespace OdooRpc.CoreCLR.Client.Internals
 {
     internal class JsonRpcClientFactory : IJsonRpcClientFactory
     {
+        private IWebRequestPreProcessor requestPreProcessor;
+        
+        public JsonRpcClientFactory() : this(null) { }
+        public JsonRpcClientFactory(IWebRequestPreProcessor requestPreProcessor)
+        {
+            this.requestPreProcessor = requestPreProcessor;
+        }
+
         public IJsonRpcClient GetRpcClient(Uri rpcEndpoint)
         {
-            return new JsonRpcWebClient(rpcEndpoint);
+            return new JsonRpcWebClient(rpcEndpoint, requestPreProcessor);
         }
     }
 }
